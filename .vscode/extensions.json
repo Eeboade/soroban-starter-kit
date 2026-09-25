@@ -1,8 +1,7 @@
 {
-  "recommendations": [
-    "rust-lang.rust-analyzer",
-    "tamasfe.even-better-toml",
-    "serayuzgur.crates",
-    "usernamehw.errorlens"
-  ]
+    "recommendations": [
+        "myml.vscode-markdown-plantuml-preview",
+        "esbenp.prettier-vscode",
+        "jebbs.plantuml"
+    ]
 }

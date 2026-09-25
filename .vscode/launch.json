@@ -2,63 +2,49 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "lldb",
+      "name": "Debug SST",
+      "type": "node",
       "request": "launch",
-      "name": "Run all contract tests",
-      "cargo": {
-        "args": ["test", "--no-run", "--workspace"],
-        "filter": {
-          "kind": "test"
-        }
-      },
-      "args": [],
-      "cwd": "${workspaceFolder}"
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/sst",
+      "runtimeArgs": ["dev", "--increase-timeout"],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      // sourceMapRenames helps with the loading spinner when debugging and viewing local variables
+      "sourceMapRenames": false,
+      "env": {
+        "AWS_PROFILE": "flo-ct-flo360"
+      }
     },
     {
-      "type": "lldb",
+      "name": "Debug Tests - Unit",
+      "type": "node",
       "request": "launch",
-      "name": "Run specific test by name",
-      "cargo": {
-        "args": ["test", "--no-run", "--workspace"],
-        "filter": {
-          "kind": "test"
-        }
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/sst",
+      "runtimeArgs": ["bind", "yarn", "\"jest\"", "\"--watch\"", "\"--config\"", "\"./jest.unit.config.cjs\"", "\"${input:scopeTestsFileName}\""],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "env": {
+        "AWS_PROFILE": "flo-ct-flo360"
       },
-      "args": ["${input:testName}"],
-      "cwd": "${workspaceFolder}"
     },
     {
-      "type": "lldb",
+      "name": "Debug Tests - E2E",
+      "type": "node",
       "request": "launch",
-      "name": "Run tests with feature flag",
-      "cargo": {
-        "args": [
-          "test",
-          "--no-run",
-          "--workspace",
-          "--features",
-          "${input:featureFlag}"
-        ],
-        "filter": {
-          "kind": "test"
-        }
+      "runtimeExecutable": "${workspaceRoot}/node_modules/.bin/sst",
+      "runtimeArgs": ["bind", "yarn", "\"vitest\"", "\"--config\"", "\"./vitest.e2e.config.ts\"", "\"${input:scopeTestsFileName}\""],
+      "console": "integratedTerminal",
+      "skipFiles": ["<node_internals>/**"],
+      "env": {
+        "AWS_PROFILE": "flo-ct-flo360"
       },
-      "args": [],
-      "cwd": "${workspaceFolder}"
-    }
+    },
   ],
   "inputs": [
     {
-      "id": "testName",
+      "id": "scopeTestsFileName",
       "type": "promptString",
-      "description": "Test name (substring match)",
-      "default": ""
-    },
-    {
-      "id": "featureFlag",
-      "type": "promptString",
-      "description": "Cargo feature flag(s) to enable",
-      "default": "upgradeable"
+      "description": "Partial file name to scope test debugging to. ex. arena. Leave blank to run all tests.",
     }
   ]
 }
